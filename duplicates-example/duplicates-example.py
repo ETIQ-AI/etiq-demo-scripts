@@ -18,8 +18,7 @@ duplicate_indices = np.random.choice(df.index, size=num_duplicates, replace=True
 duplicated_rows = df.loc[duplicate_indices]
 
 # Concatenate original data with duplicates
-# df_with_duplicates = pd.concat([df, duplicated_rows], ignore_index=True)
-df_with_duplicates = pd.concat([df, duplicated_rows], ignore_index=True).drop_duplicates().reset_index(drop=True)
+df_with_duplicates = pd.concat([df, duplicated_rows], ignore_index=True)
 
 # Shuffle the dataset so duplicates aren't all at the end
 df_with_duplicates = df_with_duplicates.sample(frac=1, random_state=42).reset_index(drop=True)
