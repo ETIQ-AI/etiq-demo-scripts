@@ -13,7 +13,7 @@ iris_df = pd.DataFrame(iris.data, columns=iris.feature_names)
 iris_df['target'] = iris.target
 
 # train test split
-iris_train_df, iris_test_df = sklearn.model_selection.train_test_split(iris_df, test_size=0.2)
+iris_train_df, iris_test_df = sklearn.model_selection.train_test_split(iris_df, test_size=0.2, random_state = 31779)
 
 # set up the random forest classifier
 amodel = RandomForestClassifier(random_state=0)
