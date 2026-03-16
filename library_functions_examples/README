@@ -1,1 +1,6 @@
 
+This folder contains a simple example of how to use the etiq copilot library directly rather than via the Etiq extension. 
+The library_functions_examples.py is an example of a basic workflow of scanning a script/pipeline, retrieving the resulting objects, and their lineage.
+The benefits of retrieving lineage, artifacts created by the code and their line numbers are the abiility to instrument deterministically tests and checks for agent created code. The file also includes a basic verification example.
+Use it as a short reference for how the library functions fit together in an end-to-end script.
+
