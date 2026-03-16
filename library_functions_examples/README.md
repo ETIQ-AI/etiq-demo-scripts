@@ -1,7 +1,7 @@
 
 ## Library Functions Example
 
-This folder contains a simple example of how to use the `etiq-copilot` library directly, rather than through the Etiq extension.
+This folder contains a simple example of how to use the `etiq_copilot` library directly, rather than through the Etiq extension.
 
 The main file to open is `library_functions_examples.py`. It demonstrates a basic end-to-end workflow:
 - scanning a script or pipeline
