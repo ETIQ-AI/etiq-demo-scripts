@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "kind": "semantic example",
+    "note": "Generated graph IDs, state ordering, and full graph text may differ by etiq-copilot version."
+  },
+  "target_file": "library_functions_examples/iris_lineage_test.py",
+  "etiq_copilot_version": ">=2.3.1",
+  "scan_errors": [],
+  "captured_objects_should_include": {
+    "states": [
+      "iris_df",
+      "species_lookup_df",
+      "iris_with_species_df",
+      "clean_measurements_df",
+      "deliberate_empty_features",
+      "wide_petal_df",
+      "species_summary_df",
+      "final_report_df"
+    ],
+    "dataframes": [
+      "iris_df",
+      "species_lookup_df",
+      "iris_with_species_df",
+      "clean_measurements_df",
+      "deliberate_empty_features",
+      "wide_petal_df",
+      "species_summary_df",
+      "final_report_df"
+    ],
+    "models": [],
+    "agents": [],
+    "unstructured": [
+      "iris",
+      "measurement_columns"
+    ]
+  },
+  "minimum_counts": {
+    "dataframes": 8,
+    "models": 0,
+    "agents": 0,
+    "unstructured": 1
+  },
+  "deliberate_error_detected": true,
+  "source_evidence_examples": [
+    {
+      "names": [
+        "deliberate_empty_features"
+      ],
+      "state_type": "DataframeState",
+      "source_contains": "not-a-real-species",
+      "scope": "Module"
+    },
+    {
+      "names": [
+        "wide_petal_df"
+      ],
+      "state_type": "DataframeState",
+      "source_contains": "petal length (cm)",
+      "scope": "Module"
+    },
+    {
+      "names": [
+        "final_report_df"
+      ],
+      "state_type": "DataframeState",
+      "source_contains": "species_summary_df.assign",
+      "scope": "Module"
+    }
+  ],
+  "lineage_outputs": {
+    "json": true,
+    "dot": true
+  }
+}

@@ -1,0 +1,5 @@
+etiq-copilot>=2.3.1
+openai
+pandas
+pydantic-ai
+scikit-learn
