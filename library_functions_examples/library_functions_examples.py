@@ -1,77 +1,108 @@
+from __future__ import annotations
 
-"""
-Example script showing how to use the etiq_copilot library 
-- to inspect a python script (user or agent made)
-- to capture all the artifacts (no manual instrumentation needed)
-- to retrieve: 
-    - lineage
-    - object/dataframe states
-    - model states (if the script includes a model)
-    - agent states (if the script includes an agent)
-
-Install the etiq_copilot library; test release:
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple "etiq-copilot==2.3.0-rc3"
-uv pip install --index-strategy unsafe-best-match --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple "etiq-copilot==2.3.0-rc3"
-
-Steps shown in this script:
-1. Run the etiq copilot scanner on a target Python file in this case `iris_lineage_test.py`.
-2. Example of how to generate lineage information from the scan results.
-3. Example of how to retrieve the dataframe objects detected by the scanner.
-4. Example of a simple verification check to identify which objects are empty.
-
-To try it on your own script point it to the file that initializes the run.
-For limitations, see the docs.
-"""
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
 
 
-from  pathlib import Path
+DEFAULT_ENTRY = "library_functions_examples/iris_lineage_test.py"
 
-#from etiq_copilot.engine.daemons.utils import working_directory
-from etiq_copilot.engine.implementations.scanner.code_scanner import DebuggerCodeScanner
-from etiq_copilot.engine.implementations.scanner.scan_results import CodeScannerResult
-from verification_functions_codex import get_empty_objects
 
-#Assign your file path 
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Run an Etiq library-functions scan for a workspace-relative Python entry file."
+    )
+    parser.add_argument(
+        "--entry",
+        default=DEFAULT_ENTRY,
+        help=f"Workspace-relative Python entry file to scan. Defaults to {DEFAULT_ENTRY}.",
+    )
+    parser.add_argument(
+        "--json-output",
+        type=Path,
+        help="Optional workspace-relative path for writing the full structured scan summary.",
+    )
+    parser.add_argument(
+        "--mock-openai",
+        action="store_true",
+        help="Run openai_unstructured_example.py in deterministic mock mode.",
+    )
+    return parser
 
-your_file_path = r"library_functions/iris_lineage_test.py"
 
-def scan_file(
-    scan_file_path: Path | str,
-) -> CodeScannerResult:
-    """Analyze Python code and return scan results.
-
-    This function serves as the main entry point for the code analysis tool.
-    """
-    scan_file_path = Path(scan_file_path)
-    scan_results = CodeScannerResult()
-    original_code: str | None = None
-    test_scanner = DebuggerCodeScanner()
+def _load_wrapper_functions():
     try:
-        original_code = Path(scan_file_path).read_text(encoding="utf-8")
-        #with (
-        #    working_directory(scan_file_path.parent),
-        #):
-        scan_results = test_scanner.scan_code(code_str=original_code)
-    except Exception:
-        raise
-    return scan_results
-
-scan_file = scan_file(scan_file_path=your_file_path)
-
-lineage_graph = scan_file.create_full_lineage_graph()
-
-objects_list = scan_file.list_dataframes()
-
-#print(objects_list)
-
-object_state = scan_file.get_dataframes()
-
-#print(object_state)
+        from .etiq_agent_wrapper import build_scan_summary, write_summary
+    except ImportError as relative_error:
+        try:
+            from etiq_agent_wrapper import build_scan_summary, write_summary
+        except ImportError as absolute_error:
+            raise RuntimeError(
+                "Unable to import the Etiq wrapper. Install dependencies with "
+                "`python -m pip install -r requirements.txt`. "
+                f"Import error: {absolute_error}"
+            ) from relative_error
+    return build_scan_summary, write_summary
 
 
-#Verification: return empty objects 
+def main() -> int:
+    args = _parser().parse_args()
 
-empty_objects = get_empty_objects(object_state)
+    if args.mock_openai:
+        os.environ["ETIQ_OPENAI_EXAMPLE_MODE"] = "mock"
 
-print(empty_objects)
+    try:
+        build_scan_summary, write_summary = _load_wrapper_functions()
+        summary = build_scan_summary(args.entry)
+    except Exception as exc:  # noqa: BLE001 - CLI should report scanner/read failures clearly.
+        print(
+            json.dumps(
+                {
+                    "target_file": args.entry,
+                    "scan_errors": [str(exc)],
+                    "captured_objects": {
+                        "states": [],
+                        "dataframes": [],
+                        "models": [],
+                        "agents": [],
+                        "unstructured": [],
+                    },
+                    "counts": {
+                        "states": 0,
+                        "dataframes": 0,
+                        "models": 0,
+                        "agents": 0,
+                        "unstructured": 0,
+                    },
+                    "source_evidence": [],
+                    "deliberate_error_detected": False,
+                    "lineage_json": "",
+                    "lineage_dot": "",
+                    "lineage_generated": {"json": False, "dot": False},
+                },
+                indent=2,
+                sort_keys=True,
+            ),
+            file=sys.stderr,
+        )
+        return 1
 
+    if args.json_output:
+        written_path = write_summary(summary, args.json_output)
+        try:
+            display_path = str(written_path.relative_to(Path.cwd()))
+        except ValueError:
+            display_path = str(written_path)
+        summary = {
+            **summary,
+            "json_output": display_path,
+        }
+
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -2,6 +2,7 @@
 __pycache__/
 *.py[codz]
 *$py.class
+.DS_Store
 
 # C extensions
 *.so
@@ -50,6 +51,16 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+# Etiq demo generated outputs
+library_functions_examples/latest_*_summary*.json
+library_functions_examples/latest_*_lineage_show.json
+library_functions_examples/tester_probe_*_summary.json
+library_functions_examples/iris_lineage_json_snippet_output.txt
+
+# Local Codex coordination/context
+codex_instructions/
+instructions_between_agents/
 
 # Translations
 *.mo

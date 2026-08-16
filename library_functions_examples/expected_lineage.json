@@ -1,0 +1,94 @@
+{
+  "metadata": {
+    "kind": "representative semantic lineage example",
+    "note": "Use this file for labels and relationships to look for, not generated node IDs, ordering, or exact raw graph text."
+  },
+  "target_file": "library_functions_examples/iris_lineage_test.py",
+  "expected_labels": [
+    "iris_df",
+    "species_lookup_df",
+    "iris_with_species_df",
+    "clean_measurements_df",
+    "deliberate_empty_features",
+    "wide_petal_df",
+    "species_summary_df",
+    "final_report_df"
+  ],
+  "semantic_edges": [
+    {
+      "from": "iris",
+      "to": "iris_df",
+      "relationship": "loaded Iris measurements are converted into the base dataframe"
+    },
+    {
+      "from": "species_lookup_df",
+      "to": "iris_with_species_df",
+      "relationship": "species labels are joined onto the base measurements"
+    },
+    {
+      "from": "iris_with_species_df",
+      "to": "clean_measurements_df",
+      "relationship": "joined rows are filtered for complete measurement values"
+    },
+    {
+      "from": "clean_measurements_df",
+      "to": "deliberate_empty_features",
+      "relationship": "bad intermediate is derived from the cleaned dataframe with an impossible species filter"
+    },
+    {
+      "from": "clean_measurements_df",
+      "to": "wide_petal_df",
+      "relationship": "cleaned rows are filtered to flowers with wider petals"
+    },
+    {
+      "from": "wide_petal_df",
+      "to": "species_summary_df",
+      "relationship": "filtered rows are aggregated by species"
+    },
+    {
+      "from": "species_summary_df",
+      "to": "final_report_df",
+      "relationship": "summary rows are ranked and annotated for the final report"
+    }
+  ],
+  "agentic_unstructured_example": {
+    "target_file": "library_functions_examples/openai_unstructured_example.py",
+    "expected_labels": [
+      "documents_df",
+      "selected_documents_df",
+      "agent",
+      "document_context",
+      "user_prompt",
+      "result",
+      "response",
+      "normalized_response_text"
+    ],
+    "semantic_edges": [
+      {
+        "from": "selected_documents_df",
+        "to": "document_context",
+        "relationship": "selected policy rows are converted into prompt context"
+      },
+      {
+        "from": "document_context",
+        "to": "user_prompt",
+        "relationship": "document context is embedded into the user prompt"
+      },
+      {
+        "from": "user_prompt",
+        "to": "agent.run_sync",
+        "relationship": "prompt is sent through the pydantic-ai agent"
+      },
+      {
+        "from": "agent.run_sync",
+        "to": "result",
+        "relationship": "agent run produces a pydantic-ai result"
+      },
+      {
+        "from": "result",
+        "to": "response",
+        "relationship": "agent output is assigned to a named response"
+      }
+    ]
+  }
+}

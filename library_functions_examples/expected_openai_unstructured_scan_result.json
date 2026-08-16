@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "kind": "semantic example",
+    "note": "Generated graph IDs, state ordering, exact values, and full graph text may differ by etiq-copilot and pydantic-ai version."
+  },
+  "target_file": "library_functions_examples/openai_unstructured_example.py",
+  "etiq_copilot_version": ">=2.3.1",
+  "mode": "agentic workflow; --mock-openai can be used for local scanner verification",
+  "scan_errors": [],
+  "captured_objects_should_include": {
+    "dataframes": [
+      "documents_df",
+      "selected_documents_df"
+    ],
+    "agents": [
+      "agent"
+    ],
+    "unstructured": [
+      "customer_question",
+      "document_context",
+      "user_prompt",
+      "result",
+      "response",
+      "normalized_response_text",
+      "final_answer_record"
+    ]
+  },
+  "source_evidence_examples": [
+    {
+      "names_include": [
+        "agent"
+      ],
+      "state_type_contains": "Agent",
+      "source_contains": "Agent("
+    },
+    {
+      "names_include": [
+        "user_prompt"
+      ],
+      "state_type": "UnstructuredState",
+      "source_contains": "Answer the customer question"
+    },
+    {
+      "names_include": [
+        "result"
+      ],
+      "state_type": "UnstructuredState",
+      "source_contains": "agent.run_sync(user_prompt)"
+    },
+    {
+      "names_include": [
+        "response"
+      ],
+      "state_type": "UnstructuredState",
+      "source_contains": "result.output"
+    }
+  ],
+  "lineage_outputs": {
+    "json": true,
+    "dot": true
+  }
+}

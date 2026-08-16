@@ -1,0 +1,125 @@
+digraph "full-lineage" {
+compound=true;
+subgraph "cluster_select_relevant_documents,1fdb58a6392e0046" {
+label="select_relevant_documents";
+bgcolor="#50E6FF";
+node_800cf18ba5a143388ea7b68fb795f789 [style=filled, fillcolor="#FFE18E", shape=circle, fontsize=12, label="documents_df"];
+"Assign,dabb8044-2d28-4054-b980-b2b4e9f3261f" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_2e3235c94d0d40e9ba396fdeef5727ec [style=filled, fillcolor="#FFE18E", shape=circle, fontsize=12, label="relevant_mask"];
+"documents_df['normalized_text'].str.lower,51f8572b-d3f0-4225-af8d-fefb4d32aea8" [style=filled, fillcolor="#46A0FF", shape=diamond, label="documents_df['normalized_text'].str.lower", fontsize=12];
+node_657ca47a74e045ebb104f0c70d7c89d5 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label=question];
+"Assign,cb21117e-927c-4659-8d58-b20f8d50ecb4" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_875c603d1db14e1e955a19fad9f500d6 [style=filled, fillcolor="#FFE18E", shape=circle, fontsize=12, label="selected_documents_df"];
+"documents_df.loc[relevant_mask].copy,5f15b7d4-fb80-4157-9eb8-5df6ce142eb3" [style=filled, fillcolor="#46A0FF", shape=diamond, label="documents_df.loc[relevant_mask].copy", fontsize=12];
+node_65db6979d784427ba6e0838e15b01554 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label=keywords];
+",65db6979-d784-427b-a6e0-838e15b01554" [style=filled, fillcolor="#46A0FF", shape=diamond, label="", fontsize=12];
+}
+node_5db2d720650e4b28b4c893e0ffc99055 -> "Assign,dabb8044-2d28-4054-b980-b2b4e9f3261f";
+"Assign,dabb8044-2d28-4054-b980-b2b4e9f3261f" -> node_800cf18ba5a143388ea7b68fb795f789;
+node_12a6d7b59ddf48a996890266d568cbfd [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="final_answer_record"];
+"{'question'" [style=filled, fillcolor="#46A0FF", shape=diamond, label="{'question': customer_question, 'answer': normalized_response_text, 'cited_doc_ids': selected_documents_df['doc_id'].tolist()}", fontsize=12];
+node_645f550cf13143d0abaf45d819660f65 -> "{'question'";
+"{'question'" -> node_12a6d7b59ddf48a996890266d568cbfd;
+node_de3f2191138447a9948b629aa07e99a8 -> "{'question'";
+node_9db0927006f0460fb32ba533d8d2f614 -> "{'question'";
+node_de3f2191138447a9948b629aa07e99a8 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="normalized_response_text"];
+"Assign,ffea757b-4943-42c1-91d5-65ee5a11c87d" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_89f95f152ad545ee958e35972ce5300d -> "Assign,ffea757b-4943-42c1-91d5-65ee5a11c87d";
+"Assign,ffea757b-4943-42c1-91d5-65ee5a11c87d" -> node_de3f2191138447a9948b629aa07e99a8;
+subgraph "cluster_build_agent,8dff33e472cad292" {
+label="build_agent";
+bgcolor="#50E6FF";
+node_e9cb49fae3a24bbd90a67261f3cbf782 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label=model];
+"os.environ.get,e9cb49fa-e3a2-4bbd-90a6-7261f3cbf782" [style=filled, fillcolor="#46A0FF", shape=diamond, label="os.environ.get", fontsize=12];
+node_1197756c108148c3abd3f414c626fafa [style=filled, fillcolor="#088F8F", shape=circle, fontsize=12, label=agent];
+"Agent,a8774764-c4af-4541-a916-775dfee4bdff" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Agent, fontsize=12];
+}
+"os.environ.get,e9cb49fa-e3a2-4bbd-90a6-7261f3cbf782" -> node_e9cb49fae3a24bbd90a67261f3cbf782;
+subgraph "cluster_build_policy_documents,3990302499195120" {
+label="build_policy_documents";
+bgcolor="#50E6FF";
+node_c9f97edc00ca49b489fe4eb8d652cc6f [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="raw_documents"];
+"{'doc_id'" [style=filled, fillcolor="#46A0FF", shape=diamond, label="{'doc_id': ['policy-001', 'policy-002', 'policy-003'], 'title': ['Refund policy', 'Shipping policy', 'Warranty policy'], 'text': ['Customers can request a refund within 30 days if the item is unused.', 'Express shipping usually arrives within two business days.', 'Electronics include a one-year warranty for manufacturing defects.']}", fontsize=12];
+node_1ea3b572ef1b43649267db9cc715ea8f [style=filled, fillcolor="#FFE18E", shape=circle, fontsize=12, label="documents_df"];
+"pd.DataFrame,c1ce9b2a-57fc-4a83-8bfd-f68a904c04cd" [style=filled, fillcolor="#46A0FF", shape=diamond, label="pd.DataFrame", fontsize=12];
+}
+"{'doc_id'" -> node_c9f97edc00ca49b489fe4eb8d652cc6f;
+node_65db6979d784427ba6e0838e15b01554 -> "documents_df['normalized_text'].str.lower,51f8572b-d3f0-4225-af8d-fefb4d32aea8";
+"documents_df['normalized_text'].str.lower,51f8572b-d3f0-4225-af8d-fefb4d32aea8" -> node_2e3235c94d0d40e9ba396fdeef5727ec;
+node_800cf18ba5a143388ea7b68fb795f789 -> "documents_df['normalized_text'].str.lower,51f8572b-d3f0-4225-af8d-fefb4d32aea8";
+node_645f550cf13143d0abaf45d819660f65 -> "Assign,cb21117e-927c-4659-8d58-b20f8d50ecb4";
+"Assign,cb21117e-927c-4659-8d58-b20f8d50ecb4" -> node_657ca47a74e045ebb104f0c70d7c89d5;
+subgraph "cluster_query_policy_agent,7d41a595d04d9184" {
+label="query_policy_agent";
+bgcolor="#50E6FF";
+node_8e2c286a58e64799a4b63c46236a6e3b [style=filled, fillcolor="#088F8F", shape=circle, fontsize=12, label=agent];
+"Assign,f14e2366-b846-472b-b4be-637b1d7a3323" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_508e6285d43c4cdf9974c85c900f7b73 [style=filled, fillcolor="#FFE18E", shape=circle, fontsize=12, label="selected_documents_df"];
+"Assign,57828d69-4efa-4469-bb35-4fafb5727d0e" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_0a343821816245fca32e9b39cc3a740a [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label=result];
+"agent.run_sync,737f9ba8-adf7-4d3c-bdbf-f8ead5736a87" [style=filled, fillcolor="#46A0FF", shape=diamond, label="agent.run_sync", fontsize=12];
+node_bb21f12215e34943b401db3d8726807d [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="document_context"];
+"selected_documents_df[['doc_id', 'title', 'normalized_text']].to_string(index=False),ce3a31f3-d1fd-4cf7-97d6-eebf169c1d2c" [style=filled, fillcolor="#46A0FF", shape=diamond, label="selected_documents_df[['doc_id', 'title', 'normalized_text']].to_string(index=False)", fontsize=12];
+node_aa7a1e727e9946859495b27b3a88d584 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label=response];
+"result.output,dee43822-28a4-453a-b606-f7eb0ffc5c15" [style=filled, fillcolor="#46A0FF", shape=diamond, label="result.output", fontsize=12];
+node_99ff23d6081041a3ab37671a0af69c10 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="user_prompt"];
+"f'Answer the customer question using only the policy excerpts.\n\nQuestion" [style=filled, fillcolor="#46A0FF", shape=diamond, label="f'Answer the customer question using only the policy excerpts.\n\nQuestion: {customer_question}\n\nPolicy excerpts:\n{document_context}'", fontsize=12];
+node_fed59b0bb33547069d18c31c1a5644b1 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="customer_question"];
+"Assign,fb06f113-8dfd-4c49-b055-9723029d7b52" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+}
+node_d45fc27e3e224789bdc1ddc1eccacb2e -> "Assign,f14e2366-b846-472b-b4be-637b1d7a3323";
+"Assign,f14e2366-b846-472b-b4be-637b1d7a3323" -> node_8e2c286a58e64799a4b63c46236a6e3b;
+node_d45fc27e3e224789bdc1ddc1eccacb2e [style=filled, fillcolor="#088F8F", shape=circle, fontsize=12, label=agent];
+"Assign,449e9a18-4174-461f-bb8f-4bb9545872ee" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_1197756c108148c3abd3f414c626fafa -> "Assign,449e9a18-4174-461f-bb8f-4bb9545872ee";
+"Assign,449e9a18-4174-461f-bb8f-4bb9545872ee" -> node_d45fc27e3e224789bdc1ddc1eccacb2e;
+node_9db0927006f0460fb32ba533d8d2f614 -> "Assign,57828d69-4efa-4469-bb35-4fafb5727d0e";
+"Assign,57828d69-4efa-4469-bb35-4fafb5727d0e" -> node_508e6285d43c4cdf9974c85c900f7b73;
+node_9db0927006f0460fb32ba533d8d2f614 [style=filled, fillcolor="#FFE18E", shape=circle, fontsize=12, label="selected_documents_df"];
+"Assign,1851a545-f019-47d4-b55f-7a46b7abf8d2" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_875c603d1db14e1e955a19fad9f500d6 -> "Assign,1851a545-f019-47d4-b55f-7a46b7abf8d2";
+"Assign,1851a545-f019-47d4-b55f-7a46b7abf8d2" -> node_9db0927006f0460fb32ba533d8d2f614;
+node_99ff23d6081041a3ab37671a0af69c10 -> "agent.run_sync,737f9ba8-adf7-4d3c-bdbf-f8ead5736a87";
+"agent.run_sync,737f9ba8-adf7-4d3c-bdbf-f8ead5736a87" -> node_0a343821816245fca32e9b39cc3a740a;
+node_8e2c286a58e64799a4b63c46236a6e3b -> "agent.run_sync,737f9ba8-adf7-4d3c-bdbf-f8ead5736a87";
+node_2e3235c94d0d40e9ba396fdeef5727ec -> "documents_df.loc[relevant_mask].copy,5f15b7d4-fb80-4157-9eb8-5df6ce142eb3";
+"documents_df.loc[relevant_mask].copy,5f15b7d4-fb80-4157-9eb8-5df6ce142eb3" -> node_875c603d1db14e1e955a19fad9f500d6;
+node_800cf18ba5a143388ea7b68fb795f789 -> "documents_df.loc[relevant_mask].copy,5f15b7d4-fb80-4157-9eb8-5df6ce142eb3";
+node_c9f97edc00ca49b489fe4eb8d652cc6f -> "pd.DataFrame,c1ce9b2a-57fc-4a83-8bfd-f68a904c04cd";
+"pd.DataFrame,c1ce9b2a-57fc-4a83-8bfd-f68a904c04cd" -> node_1ea3b572ef1b43649267db9cc715ea8f;
+subgraph "cluster_normalize_response_text,e2b4a5ceed69f801" {
+label="normalize_response_text";
+bgcolor="#50E6FF";
+node_551f1f54f1a34feea5ebe0e34e10a20f [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label=response];
+"Assign,fde8aef8-04f8-41ce-9647-73eb0ff3a8d1" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_89f95f152ad545ee958e35972ce5300d [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="normalized_response_text"];
+"' '.join(response.strip().split()),bfe6552d-550a-4130-a428-c36f032e11c1" [style=filled, fillcolor="#46A0FF", shape=diamond, label="' '.join(response.strip().split())", fontsize=12];
+}
+node_8ed2dca0637944a6b7bdcab28fc6c719 -> "Assign,fde8aef8-04f8-41ce-9647-73eb0ff3a8d1";
+"Assign,fde8aef8-04f8-41ce-9647-73eb0ff3a8d1" -> node_551f1f54f1a34feea5ebe0e34e10a20f;
+node_8ed2dca0637944a6b7bdcab28fc6c719 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label=response];
+"Assign,03e965b7-a9bf-4093-912a-5b1fc975e4da" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_aa7a1e727e9946859495b27b3a88d584 -> "Assign,03e965b7-a9bf-4093-912a-5b1fc975e4da";
+"Assign,03e965b7-a9bf-4093-912a-5b1fc975e4da" -> node_8ed2dca0637944a6b7bdcab28fc6c719;
+",65db6979-d784-427b-a6e0-838e15b01554" -> node_65db6979d784427ba6e0838e15b01554;
+node_551f1f54f1a34feea5ebe0e34e10a20f -> "' '.join(response.strip().split()),bfe6552d-550a-4130-a428-c36f032e11c1";
+"' '.join(response.strip().split()),bfe6552d-550a-4130-a428-c36f032e11c1" -> node_89f95f152ad545ee958e35972ce5300d;
+node_5db2d720650e4b28b4c893e0ffc99055 [style=filled, fillcolor="#FFE18E", shape=circle, fontsize=12, label="documents_df"];
+"Assign,b41837e6-def2-4040-bec1-3caaebd1e238" [style=filled, fillcolor="#46A0FF", shape=diamond, label=Assign, fontsize=12];
+node_1ea3b572ef1b43649267db9cc715ea8f -> "Assign,b41837e6-def2-4040-bec1-3caaebd1e238";
+"Assign,b41837e6-def2-4040-bec1-3caaebd1e238" -> node_5db2d720650e4b28b4c893e0ffc99055;
+node_508e6285d43c4cdf9974c85c900f7b73 -> "selected_documents_df[['doc_id', 'title', 'normalized_text']].to_string(index=False),ce3a31f3-d1fd-4cf7-97d6-eebf169c1d2c";
+"selected_documents_df[['doc_id', 'title', 'normalized_text']].to_string(index=False),ce3a31f3-d1fd-4cf7-97d6-eebf169c1d2c" -> node_bb21f12215e34943b401db3d8726807d;
+node_0a343821816245fca32e9b39cc3a740a -> "result.output,dee43822-28a4-453a-b606-f7eb0ffc5c15";
+"result.output,dee43822-28a4-453a-b606-f7eb0ffc5c15" -> node_aa7a1e727e9946859495b27b3a88d584;
+node_fed59b0bb33547069d18c31c1a5644b1 -> "f'Answer the customer question using only the policy excerpts.\n\nQuestion";
+"f'Answer the customer question using only the policy excerpts.\n\nQuestion" -> node_99ff23d6081041a3ab37671a0af69c10;
+node_bb21f12215e34943b401db3d8726807d -> "f'Answer the customer question using only the policy excerpts.\n\nQuestion";
+node_645f550cf13143d0abaf45d819660f65 -> "Assign,fb06f113-8dfd-4c49-b055-9723029d7b52";
+"Assign,fb06f113-8dfd-4c49-b055-9723029d7b52" -> node_fed59b0bb33547069d18c31c1a5644b1;
+node_e9cb49fae3a24bbd90a67261f3cbf782 -> "Agent,a8774764-c4af-4541-a916-775dfee4bdff";
+"Agent,a8774764-c4af-4541-a916-775dfee4bdff" -> node_1197756c108148c3abd3f414c626fafa;
+node_645f550cf13143d0abaf45d819660f65 [style=filled, fillcolor="#DAB1DA", shape=circle, fontsize=12, label="customer_question"];
+"'Can I return an unused item after two weeks?',645f550c-f131-43d0-abaf-45d819660f65" [style=filled, fillcolor="#46A0FF", shape=diamond, label="'Can I return an unused item after two weeks?'", fontsize=12];
+"'Can I return an unused item after two weeks?',645f550c-f131-43d0-abaf-45d819660f65" -> node_645f550cf13143d0abaf45d819660f65;
+}

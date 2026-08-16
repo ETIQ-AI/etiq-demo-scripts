@@ -1,35 +1,50 @@
 from sklearn import datasets
-import sklearn.model_selection
-from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 
-#test verification
 
-empty_dataframe = pd.DataFrame(columns=["a", "b"])
-
-# load in the iris dataset
 iris = datasets.load_iris()
 
-# convert to a pandas dataframe
 iris_df = pd.DataFrame(iris.data, columns=iris.feature_names)
+iris_df["species_id"] = iris.target
 
-# add target
-iris_df['target'] = iris.target
+species_lookup_df = pd.DataFrame(
+    {
+        "species_id": range(len(iris.target_names)),
+        "species": iris.target_names,
+    }
+)
 
-# train test split
-iris_train_df, iris_test_df = sklearn.model_selection.train_test_split(iris_df, test_size=0.2, random_state = 31779)
+iris_with_species_df = iris_df.merge(species_lookup_df, on="species_id", how="left")
 
-# set up the random forest classifier
-amodel = RandomForestClassifier(random_state=0)
+measurement_columns = iris.feature_names
+clean_measurements_df = iris_with_species_df.dropna(subset=measurement_columns).copy()
 
-# create the various datas we need
-iris_training_features = iris_train_df[iris.feature_names].copy()
-iris_test_features = iris_test_df[iris.feature_names].copy()
-iris_target_training = iris_train_df['target'].copy()
+# Deliberate bad intermediate for verification examples. This object is empty
+# and should be visible to Etiq, while the final report continues from the
+# correct cleaned dataframe.
+deliberate_empty_features = clean_measurements_df[
+    clean_measurements_df["species"] == "not-a-real-species"
+][measurement_columns].copy()
 
-# fit the model
-amodel.fit(iris_training_features, iris_target_training)
+wide_petal_df = clean_measurements_df[
+    clean_measurements_df["petal length (cm)"] >= 4.0
+].copy()
 
-# predict against test
-iris_target_testing = iris_test_df['target'].copy()
-preds = amodel.predict(iris_test_features)
+wide_petal_df["petal_area"] = (
+    wide_petal_df["petal length (cm)"] * wide_petal_df["petal width (cm)"]
+)
+
+species_summary_df = (
+    wide_petal_df.groupby("species", as_index=False)
+    .agg(
+        flower_count=("species_id", "count"),
+        avg_petal_length=("petal length (cm)", "mean"),
+        avg_petal_area=("petal_area", "mean"),
+    )
+    .sort_values("avg_petal_area", ascending=False)
+)
+
+final_report_df = species_summary_df.assign(
+    rank=range(1, len(species_summary_df) + 1),
+    source_rows=len(wide_petal_df),
+)
