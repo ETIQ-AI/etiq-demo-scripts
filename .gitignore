@@ -53,10 +53,9 @@ coverage.xml
 cover/
 
 # Etiq demo generated outputs
-library_functions_examples/latest_*_summary*.json
-library_functions_examples/latest_*_lineage_show.json
-library_functions_examples/tester_probe_*_summary.json
-library_functions_examples/iris_lineage_json_snippet_output.txt
+.etiq/artifacts/
+.etiq/reports/
+.etiq/test_outputs/
 
 # Local Codex coordination/context
 codex_instructions/

@@ -3,7 +3,7 @@
     "kind": "representative semantic lineage example",
     "note": "Use this file for labels and relationships to look for, not generated node IDs, ordering, or exact raw graph text."
   },
-  "target_file": "library_functions_examples/iris_lineage_test.py",
+  "target_file": "examples/structured_data/iris_lineage_test.py",
   "expected_labels": [
     "iris_df",
     "species_lookup_df",
@@ -50,45 +50,5 @@
       "to": "final_report_df",
       "relationship": "summary rows are ranked and annotated for the final report"
     }
-  ],
-  "agentic_unstructured_example": {
-    "target_file": "library_functions_examples/openai_unstructured_example.py",
-    "expected_labels": [
-      "documents_df",
-      "selected_documents_df",
-      "agent",
-      "document_context",
-      "user_prompt",
-      "result",
-      "response",
-      "normalized_response_text"
-    ],
-    "semantic_edges": [
-      {
-        "from": "selected_documents_df",
-        "to": "document_context",
-        "relationship": "selected policy rows are converted into prompt context"
-      },
-      {
-        "from": "document_context",
-        "to": "user_prompt",
-        "relationship": "document context is embedded into the user prompt"
-      },
-      {
-        "from": "user_prompt",
-        "to": "agent.run_sync",
-        "relationship": "prompt is sent through the pydantic-ai agent"
-      },
-      {
-        "from": "agent.run_sync",
-        "to": "result",
-        "relationship": "agent run produces a pydantic-ai result"
-      },
-      {
-        "from": "result",
-        "to": "response",
-        "relationship": "agent output is assigned to a named response"
-      }
-    ]
-  }
+  ]
 }

@@ -3,7 +3,7 @@
     "kind": "semantic example",
     "note": "Generated graph IDs, state ordering, exact values, and full graph text may differ by etiq-copilot and pydantic-ai version."
   },
-  "target_file": "library_functions_examples/openai_unstructured_example.py",
+  "target_file": "examples/agentic_unstructured/openai_unstructured_example.py",
   "etiq_copilot_version": ">=2.3.1",
   "mode": "agentic workflow; --mock-openai can be used for local scanner verification",
   "scan_errors": [],
