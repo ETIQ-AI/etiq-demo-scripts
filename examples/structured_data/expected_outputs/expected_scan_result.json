@@ -3,7 +3,7 @@
     "kind": "semantic example",
     "note": "Generated graph IDs, state ordering, and full graph text may differ by etiq-copilot version."
   },
-  "target_file": "library_functions_examples/iris_lineage_test.py",
+  "target_file": "examples/structured_data/iris_lineage_test.py",
   "etiq_copilot_version": ">=2.3.1",
   "scan_errors": [],
   "captured_objects_should_include": {
